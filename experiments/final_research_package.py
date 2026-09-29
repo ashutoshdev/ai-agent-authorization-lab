@@ -103,6 +103,10 @@ def build_package() -> str:
         "authorization_context_drift_fuzzer.json"
     )
 
+    tenant_binding = read_json(
+        "tenant_binding_weak_vs_protected.json"
+    )
+
     generated_at = datetime.now(
         timezone.utc
     ).isoformat()
@@ -286,6 +290,9 @@ def build_package() -> str:
         ),
         "authorization_context_drift_fuzzer.json": evidence_exists(
             "authorization_context_drift_fuzzer.json"
+        ),
+        "tenant_binding_weak_vs_protected.json": evidence_exists(
+            "tenant_binding_weak_vs_protected.json"
         ),
     }
 
@@ -815,7 +822,51 @@ def build_package() -> str:
     lines.append("")
 
     lines.append(
-        "# 16. Responsible Disclosure Position"
+        "# 16. Tenant Binding Architecture Comparison"
+    )
+    lines.append("")
+
+    lines.append(
+        "A real Llama 3.2 tool-calling experiment compared the same "
+        "model-generated tenant context against two executor designs."
+    )
+    lines.append("")
+
+    if tenant_binding:
+        model_name = get_value(tenant_binding, "model", default="unknown")
+        original_tenant = get_value(tenant_binding, "original_tenant", default="unknown")
+        target_tenant = get_value(tenant_binding, "target_tenant", default="unknown")
+        weak = tenant_binding.get("weak_executor", {})
+        protected = tenant_binding.get("protected_executor", {})
+
+        lines.append(f"- Model: **{model_name}**")
+        lines.append(f"- Original application tenant: **{original_tenant}**")
+        lines.append(f"- Model-supplied target tenant: **{target_tenant}**")
+        lines.append(f"- Weak executor cross-tenant access: **{weak.get('cross_tenant_access', False)}**")
+        lines.append(f"- Protected executor cross-tenant access: **{protected.get('cross_tenant_access', False)}**")
+        lines.append("")
+        lines.append(
+            "The same model-generated request caused the intentionally "
+            "weak executor to authorize the tenant-b document, while the "
+            "application-bound executor enforced tenant-a and denied the "
+            "request."
+        )
+        lines.append("")
+        lines.append(
+            "This demonstrates the security effect of trusting "
+            "model-supplied tenant context in the reference executor. "
+            "It does not demonstrate a vulnerability in Llama 3.2 or "
+            "an external provider."
+        )
+    else:
+        lines.append(
+            "Tenant-binding comparison evidence was not available when "
+            "this package was generated."
+        )
+
+    lines.append("")
+    lines.append(
+        "# 17. Responsible Disclosure Position"
     )
     lines.append("")
 
@@ -836,7 +887,7 @@ def build_package() -> str:
     lines.append("")
 
     lines.append(
-        "# 17. Reproduction"
+        "# 18. Reproduction"
     )
     lines.append("")
 
@@ -884,13 +935,16 @@ def build_package() -> str:
         "python -m experiments.context_drift_regression"
     )
     lines.append(
+        "python -m experiments.tenant_binding_weak_vs_protected"
+    )
+    lines.append(
         "python -m experiments.final_research_package"
     )
     lines.append("```")
     lines.append("")
 
     lines.append(
-        "# 18. Limitations"
+        "# 19. Limitations"
     )
     lines.append("")
 
@@ -923,7 +977,7 @@ def build_package() -> str:
     lines.append("")
 
     lines.append(
-        "# 19. Final Research Statement"
+        "# 20. Final Research Statement"
     )
     lines.append("")
 

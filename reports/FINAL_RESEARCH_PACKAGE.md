@@ -2,7 +2,7 @@
 
 # Final Security Research Package
 
-Generated: `2026-09-28T23:37:15.698914+00:00`
+Generated: `2026-09-29T11:24:19.766284+00:00`
 
 ---
 
@@ -61,7 +61,7 @@ The laboratory evaluates the following invariants:
 
 # 5. Evidence Summary
 
-- Evidence files available: **11/11**
+- Evidence files available: **12/12**
 - Authorization fuzz cases: **1000**
 - Property-based security cases: **5000**
 - Stateful attack chains: **4**
@@ -169,13 +169,27 @@ The minimized reproducible case demonstrates the following composition failure: 
 
 This is a controlled authorization-context composition finding. It does not establish a vulnerability in an external cloud provider, AI provider, or production service.
 
-# 16. Responsible Disclosure Position
+# 16. Tenant Binding Architecture Comparison
+
+A real Llama 3.2 tool-calling experiment compared the same model-generated tenant context against two executor designs.
+
+- Model: **llama3.2**
+- Original application tenant: **tenant-a**
+- Model-supplied target tenant: **tenant-b**
+- Weak executor cross-tenant access: **True**
+- Protected executor cross-tenant access: **False**
+
+The same model-generated request caused the intentionally weak executor to authorize the tenant-b document, while the application-bound executor enforced tenant-a and denied the request.
+
+This demonstrates the security effect of trusting model-supplied tenant context in the reference executor. It does not demonstrate a vulnerability in Llama 3.2 or an external provider.
+
+# 17. Responsible Disclosure Position
 
 This research package is suitable as a controlled security research artifact. It does not establish a vulnerability against a third-party cloud provider, AI provider, or production service.
 
 Any future external disclosure should be based on a separately reproduced issue against an explicitly authorized target and should include the target, affected component, reproduction steps, security impact, and evidence.
 
-# 17. Reproduction
+# 18. Reproduction
 
 The principal experiments can be reproduced using Python module execution from the project root.
 
@@ -192,10 +206,11 @@ python -m experiments.research_dashboard
 python -m experiments.authorization_context_drift_test
 python -m experiments.authorization_context_drift_fuzzer
 python -m experiments.context_drift_regression
+python -m experiments.tenant_binding_weak_vs_protected
 python -m experiments.final_research_package
 ```
 
-# 18. Limitations
+# 19. Limitations
 
 The laboratory is intentionally simplified and local.
 
@@ -205,7 +220,7 @@ Model-generated tool calls are also dependent on the selected model and prompt c
 
 Likewise, controlled divergences in the intentionally weak authorization model are not evidence of a real-world vulnerability without reproduction against an authorized external target.
 
-# 19. Final Research Statement
+# 20. Final Research Statement
 
 The laboratory demonstrates a useful security-testing methodology for AI-agent authorization in multi-tenant systems.
 
