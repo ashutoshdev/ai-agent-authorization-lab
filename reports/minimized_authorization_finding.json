@@ -1,0 +1,154 @@
+{
+  "experiment": "Authorization Finding Minimizer",
+  "purpose": "Minimize a controlled confused-deputy authorization finding while preserving the complete agent-to-resource chain.",
+  "threat_model": {
+    "caller_tenant": "tenant-a",
+    "resource_tenant": "tenant-b",
+    "agent": "agent:tenant-a",
+    "tool": "tool:document-reader",
+    "service": "service:shared-document-service",
+    "resource": "resource:tenant-b-document",
+    "capability": "read_document"
+  },
+  "security_hypothesis": "A shared service that accepts a capability without binding it to the original caller tenant may permit a cross-tenant action.",
+  "original": {
+    "edge_count": 4,
+    "graph": {
+      "nodes": {
+        "agent:tenant-a": {
+          "name": "agent:tenant-a",
+          "kind": "agent"
+        },
+        "tool:document-reader": {
+          "name": "tool:document-reader",
+          "kind": "tool"
+        },
+        "service:shared-document-service": {
+          "name": "service:shared-document-service",
+          "kind": "service"
+        },
+        "resource:tenant-b-document": {
+          "name": "resource:tenant-b-document",
+          "kind": "resource"
+        }
+      },
+      "edges": [
+        {
+          "source": "agent:tenant-a",
+          "target": "tool:document-reader",
+          "action": "invoke",
+          "tenant_id": "tenant-a",
+          "capability": null
+        },
+        {
+          "source": "tool:document-reader",
+          "target": "service:shared-document-service",
+          "action": "call",
+          "tenant_id": "tenant-a",
+          "capability": null
+        },
+        {
+          "source": "service:shared-document-service",
+          "target": "resource:tenant-b-document",
+          "action": "read",
+          "tenant_id": "tenant-b",
+          "capability": "read_document"
+        },
+        {
+          "source": "resource:tenant-b-document",
+          "target": "resource:tenant-b-document",
+          "action": "owns",
+          "tenant_id": "tenant-b",
+          "capability": null
+        }
+      ]
+    },
+    "evaluation": {
+      "strict": {
+        "allowed": false,
+        "reason": "Resource capability exists, but its tenant does not match the caller tenant.",
+        "effective_tenant": "tenant-a"
+      },
+      "weak": {
+        "allowed": true,
+        "reason": "Capability accepted without binding it to the caller tenant.",
+        "effective_tenant": "tenant-b"
+      },
+      "complete_chain": true,
+      "reproduces_finding": true
+    }
+  },
+  "minimized": {
+    "edge_count": 4,
+    "graph": {
+      "nodes": {
+        "agent:tenant-a": {
+          "name": "agent:tenant-a",
+          "kind": "agent"
+        },
+        "tool:document-reader": {
+          "name": "tool:document-reader",
+          "kind": "tool"
+        },
+        "service:shared-document-service": {
+          "name": "service:shared-document-service",
+          "kind": "service"
+        },
+        "resource:tenant-b-document": {
+          "name": "resource:tenant-b-document",
+          "kind": "resource"
+        }
+      },
+      "edges": [
+        {
+          "source": "agent:tenant-a",
+          "target": "tool:document-reader",
+          "action": "invoke",
+          "tenant_id": "tenant-a",
+          "capability": null
+        },
+        {
+          "source": "tool:document-reader",
+          "target": "service:shared-document-service",
+          "action": "call",
+          "tenant_id": "tenant-a",
+          "capability": null
+        },
+        {
+          "source": "service:shared-document-service",
+          "target": "resource:tenant-b-document",
+          "action": "read",
+          "tenant_id": "tenant-b",
+          "capability": "read_document"
+        },
+        {
+          "source": "resource:tenant-b-document",
+          "target": "resource:tenant-b-document",
+          "action": "owns",
+          "tenant_id": "tenant-b",
+          "capability": null
+        }
+      ]
+    },
+    "evaluation": {
+      "strict": {
+        "allowed": false,
+        "reason": "Resource capability exists, but its tenant does not match the caller tenant.",
+        "effective_tenant": "tenant-a"
+      },
+      "weak": {
+        "allowed": true,
+        "reason": "Capability accepted without binding it to the caller tenant.",
+        "effective_tenant": "tenant-b"
+      },
+      "complete_chain": true,
+      "reproduces_finding": true
+    }
+  },
+  "minimization": {
+    "edges_removed": 0,
+    "complete_chain_preserved": true,
+    "finding_preserved": true
+  },
+  "interpretation": "This is a controlled local reproduction of an authorization design failure. It is not evidence of a vulnerability in a real cloud provider or production system."
+}

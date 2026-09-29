@@ -1,0 +1,73 @@
+{
+  "summary": {
+    "generated_at": "2026-09-28T23:12:42.995144+00:00",
+    "evidence_files": 9,
+    "available_files": 9,
+    "missing_files": 0,
+    "fuzz_cases": 1000,
+    "property_cases": 5000,
+    "attack_chains": 4,
+    "mutation_cases": 75,
+    "end_to_end_scenarios": 5,
+    "successful_cross_tenant_access": 0,
+    "controlled_findings": 188,
+    "security_violations": 0,
+    "overall_status": "CONTROLLED_FINDINGS"
+  },
+  "evidence": [
+    {
+      "name": "security_corpus",
+      "path": "reports/security_corpus.json",
+      "exists": true,
+      "size_bytes": 5935
+    },
+    {
+      "name": "multi_provider",
+      "path": "reports/multi_provider_security.json",
+      "exists": true,
+      "size_bytes": 2936
+    },
+    {
+      "name": "authorization_fuzz",
+      "path": "reports/authorization_fuzz.json",
+      "exists": true,
+      "size_bytes": 93209
+    },
+    {
+      "name": "minimized_finding",
+      "path": "reports/minimized_authorization_finding.json",
+      "exists": true,
+      "size_bytes": 4714
+    },
+    {
+      "name": "end_to_end",
+      "path": "reports/end_to_end_security.json",
+      "exists": true,
+      "size_bytes": 2672
+    },
+    {
+      "name": "tool_mutation",
+      "path": "reports/tool_call_mutation.json",
+      "exists": true,
+      "size_bytes": 76593
+    },
+    {
+      "name": "context_tampering",
+      "path": "reports/context_tampering.json",
+      "exists": true,
+      "size_bytes": 1625
+    },
+    {
+      "name": "attack_chains",
+      "path": "reports/agent_attack_chains.json",
+      "exists": true,
+      "size_bytes": 3997
+    },
+    {
+      "name": "property_campaign",
+      "path": "reports/property_security_campaign.json",
+      "exists": true,
+      "size_bytes": 386
+    }
+  ]
+}

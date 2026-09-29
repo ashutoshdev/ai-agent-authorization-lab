@@ -1,0 +1,131 @@
+{
+  "experiment": "stateful_agent_attack_chains",
+  "timestamp": "2026-09-28T22:44:32.232800+00:00",
+  "security_invariant": "successful cross-tenant resource access must equal zero",
+  "chain_count": 4,
+  "violations": 2,
+  "protected": 1,
+  "results": [
+    {
+      "chain_id": "CHAIN-001",
+      "name": "Same-tenant normal flow",
+      "caller_tenant": "tenant-a",
+      "resource_tenant": "tenant-a",
+      "steps": [
+        {
+          "step": 1,
+          "action": "issue_capability",
+          "tenant": "tenant-a",
+          "target": "read_document",
+          "result": "success",
+          "effective_tenant": "tenant-a",
+          "reason": "Capability issued for controlled laboratory scenario."
+        },
+        {
+          "step": 2,
+          "action": "read_resource",
+          "tenant": "tenant-a",
+          "target": "doc-a-1",
+          "result": "success",
+          "effective_tenant": "tenant-a",
+          "reason": "Capability and resource belong to caller tenant."
+        }
+      ],
+      "successful_cross_tenant_access": 0,
+      "invariant_status": "PASS"
+    },
+    {
+      "chain_id": "CHAIN-002",
+      "name": "Cross-tenant delegated capability",
+      "caller_tenant": "tenant-a",
+      "resource_tenant": "tenant-b",
+      "steps": [
+        {
+          "step": 1,
+          "action": "issue_capability",
+          "tenant": "tenant-a",
+          "target": "read_document",
+          "result": "success",
+          "effective_tenant": "tenant-b",
+          "reason": "Capability issued for controlled laboratory scenario."
+        },
+        {
+          "step": 2,
+          "action": "read_resource",
+          "tenant": "tenant-a",
+          "target": "doc-b-1",
+          "result": "denied",
+          "effective_tenant": "tenant-a",
+          "reason": "Capability is not bound to the caller tenant."
+        }
+      ],
+      "successful_cross_tenant_access": 0,
+      "invariant_status": "PROTECTED"
+    },
+    {
+      "chain_id": "CHAIN-003",
+      "name": "Weak cross-tenant capability reuse",
+      "caller_tenant": "tenant-a",
+      "resource_tenant": "tenant-b",
+      "steps": [
+        {
+          "step": 1,
+          "action": "issue_capability",
+          "tenant": "tenant-a",
+          "target": "read_document",
+          "result": "success",
+          "effective_tenant": "tenant-b",
+          "reason": "Capability issued for controlled laboratory scenario."
+        },
+        {
+          "step": 2,
+          "action": "read_resource",
+          "tenant": "tenant-a",
+          "target": "doc-b-1",
+          "result": "success",
+          "effective_tenant": "tenant-b",
+          "reason": "Weak model accepted the capability tenant as the effective tenant."
+        }
+      ],
+      "successful_cross_tenant_access": 1,
+      "invariant_status": "VIOLATION"
+    },
+    {
+      "chain_id": "CHAIN-004",
+      "name": "Capability tenant substitution",
+      "caller_tenant": "tenant-a",
+      "resource_tenant": "tenant-b",
+      "steps": [
+        {
+          "step": 1,
+          "action": "issue_capability",
+          "tenant": "tenant-a",
+          "target": "read_document",
+          "result": "success",
+          "effective_tenant": "tenant-a",
+          "reason": "Capability issued for controlled laboratory scenario."
+        },
+        {
+          "step": 2,
+          "action": "read_resource",
+          "tenant": "tenant-a",
+          "target": "doc-a-1",
+          "result": "success",
+          "effective_tenant": "tenant-a",
+          "reason": "Capability and resource belong to caller tenant."
+        },
+        {
+          "step": 3,
+          "action": "read_resource",
+          "tenant": "tenant-a",
+          "target": "doc-b-1",
+          "result": "success",
+          "effective_tenant": "tenant-b",
+          "reason": "Weak model accepted the capability tenant as the effective tenant."
+        }
+      ],
+      "successful_cross_tenant_access": 1,
+      "invariant_status": "VIOLATION"
+    }
+  ]
+}

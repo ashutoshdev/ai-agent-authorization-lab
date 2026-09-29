@@ -1,0 +1,54 @@
+{
+  "experiment": "context_tampering_fuzzer",
+  "timestamp": "2026-09-28T22:44:32.149303+00:00",
+  "security_property": "A tenant substitution must never produce unauthorized resource access.",
+  "cases": 4,
+  "violations": 4,
+  "detected_tampering": 0,
+  "results": [
+    {
+      "case_id": "CTX-001",
+      "injection_point": "agent",
+      "original_tenant": "tenant-a",
+      "injected_tenant": "tenant-b",
+      "context_tenant_after_tampering": "tenant-b",
+      "allowed": true,
+      "effective_tenant": "tenant-b",
+      "status": "VIOLATION",
+      "reason": "Tenant matches resource."
+    },
+    {
+      "case_id": "CTX-002",
+      "injection_point": "tool",
+      "original_tenant": "tenant-a",
+      "injected_tenant": "tenant-b",
+      "context_tenant_after_tampering": "tenant-b",
+      "allowed": true,
+      "effective_tenant": "tenant-b",
+      "status": "VIOLATION",
+      "reason": "Tenant matches resource."
+    },
+    {
+      "case_id": "CTX-003",
+      "injection_point": "shared-service",
+      "original_tenant": "tenant-a",
+      "injected_tenant": "tenant-b",
+      "context_tenant_after_tampering": "tenant-b",
+      "allowed": true,
+      "effective_tenant": "tenant-b",
+      "status": "VIOLATION",
+      "reason": "Tenant matches resource."
+    },
+    {
+      "case_id": "CTX-004",
+      "injection_point": "authorization",
+      "original_tenant": "tenant-a",
+      "injected_tenant": "tenant-b",
+      "context_tenant_after_tampering": "tenant-b",
+      "allowed": true,
+      "effective_tenant": "tenant-b",
+      "status": "VIOLATION",
+      "reason": "Tenant matches resource."
+    }
+  ]
+}

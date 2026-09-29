@@ -1,0 +1,14 @@
+{
+  "experiment": "Property-Based Security Campaign",
+  "security_invariant": "Authorization must require valid subject, audience, tenant binding, expiration, revocation state, and resource tenant binding.",
+  "summary": {
+    "iterations": 5000,
+    "seed": 42,
+    "passed": 7,
+    "protected": 4993,
+    "violations": 0,
+    "allowed": 7,
+    "denied": 4993
+  },
+  "violations": []
+}

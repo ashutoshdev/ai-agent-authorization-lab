@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "experiment": "authorization_context_drift",
+    "timestamp": "2026-09-28T23:03:34.496959+00:00",
+    "scope": "local controlled security research lab",
+    "hypothesis": "A capability bound to the original tenant must not become authorized for another tenant merely because the authorization context changes during composition."
+  },
+  "security_property": {
+    "name": "authorization_context_integrity",
+    "invariant": "original caller tenant remains authoritative throughout the authorization chain"
+  },
+  "summary": {
+    "cases": 5,
+    "cross_tenant_cases": 3,
+    "context_drift_cases": 2,
+    "context_drift_violations": 2,
+    "strict_cross_tenant_allowed": 0,
+    "context_consuming_cross_tenant_allowed": 2
+  },
+  "findings": [
+    {
+      "case_id": "DRIFT-001",
+      "original_tenant": "tenant-a",
+      "capability_tenant": "tenant-a",
+      "resource_id": "doc-a-1",
+      "resource_tenant": "tenant-a",
+      "context_before": "tenant-a",
+      "context_after": "tenant-a",
+      "context_drift": false,
+      "cross_tenant_request": false,
+      "strict": {
+        "allowed": true,
+        "reason": "Caller, capability, context, and resource tenant match."
+      },
+      "context_consuming_model": {
+        "allowed": true,
+        "reason": "Downstream authorization trusted the effective tenant without binding it to the original caller."
+      },
+      "context_drift_violation": false
+    },
+    {
+      "case_id": "DRIFT-002",
+      "original_tenant": "tenant-a",
+      "capability_tenant": "tenant-a",
+      "resource_id": "doc-b-1",
+      "resource_tenant": "tenant-b",
+      "context_before": "tenant-a",
+      "context_after": "tenant-a",
+      "context_drift": false,
+      "cross_tenant_request": true,
+      "strict": {
+        "allowed": false,
+        "reason": "Resource belongs to another tenant."
+      },
+      "context_consuming_model": {
+        "allowed": false,
+        "reason": "Effective tenant does not own the resource."
+      },
+      "context_drift_violation": false
+    },
+    {
+      "case_id": "DRIFT-003",
+      "original_tenant": "tenant-a",
+      "capability_tenant": "tenant-a",
+      "resource_id": "doc-b-1",
+      "resource_tenant": "tenant-b",
+      "context_before": "tenant-a",
+      "context_after": "tenant-b",
+      "context_drift": true,
+      "cross_tenant_request": true,
+      "strict": {
+        "allowed": false,
+        "reason": "Authorization context drift detected."
+      },
+      "context_consuming_model": {
+        "allowed": true,
+        "reason": "Downstream authorization trusted the effective tenant without binding it to the original caller."
+      },
+      "context_drift_violation": true
+    },
+    {
+      "case_id": "DRIFT-004",
+      "original_tenant": "tenant-b",
+      "capability_tenant": "tenant-b",
+      "resource_id": "doc-a-1",
+      "resource_tenant": "tenant-a",
+      "context_before": "tenant-b",
+      "context_after": "tenant-a",
+      "context_drift": true,
+      "cross_tenant_request": true,
+      "strict": {
+        "allowed": false,
+        "reason": "Authorization context drift detected."
+      },
+      "context_consuming_model": {
+        "allowed": true,
+        "reason": "Downstream authorization trusted the effective tenant without binding it to the original caller."
+      },
+      "context_drift_violation": true
+    },
+    {
+      "case_id": "DRIFT-005",
+      "original_tenant": "tenant-b",
+      "capability_tenant": "tenant-b",
+      "resource_id": "doc-b-1",
+      "resource_tenant": "tenant-b",
+      "context_before": "tenant-b",
+      "context_after": "tenant-b",
+      "context_drift": false,
+      "cross_tenant_request": false,
+      "strict": {
+        "allowed": true,
+        "reason": "Caller, capability, context, and resource tenant match."
+      },
+      "context_consuming_model": {
+        "allowed": true,
+        "reason": "Downstream authorization trusted the effective tenant without binding it to the original caller."
+      },
+      "context_drift_violation": false
+    }
+  ]
+}
